@@ -1,0 +1,44 @@
+{
+    "name" : "get-todos",
+    "proxy" : {
+        "listen_path" : "/todos",
+        "upstreams" : {
+            "balancing": "roundrobin",
+            "targets": [
+                {"target": "http://todo-service:8080/todos"}
+            ]
+        },
+        "methods" : ["GET", "OPTIONS"]
+    },
+    "health_check": {
+        "url": "http://todo-service:8080/status",
+        "timeout": 3
+    },
+    "plugins": [
+        {
+            "name": "oauth2",
+            "enabled" : true,
+            "config": {
+                "server_name": "idp"
+            }
+        },
+        {
+            "name": "cors",
+            "enabled": true,
+            "config": {
+                "domains": ["*"],
+                "exposed_headers": [],
+                "methods": [
+                    "GET",
+                    "POST",
+                    "PUT",
+                    "OPTIONS",
+                    "DELETE",
+                    "PATCH"
+                ],
+                "request_headers": ["Accept", "Authorization", "Content-Type", "Origin", "X-Requested-With"],
+                "options_passthrough": true
+            }
+        }
+    ]
+}

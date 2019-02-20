@@ -1,0 +1,17 @@
+{
+    "name" : "register",
+    "proxy" : {
+        "listen_path" : "/users",
+        "upstreams" : {
+            "balancing": "roundrobin",
+            "targets": [
+                {"target": "http://user-service:8080/users"}
+            ]
+        },
+        "methods" : ["POST", "OPTIONS"]
+    },
+    "health_check": {
+        "url": "http://user-service:8080/status",
+        "timeout": 3
+    }
+}

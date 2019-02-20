@@ -1,0 +1,26 @@
+{
+    "name" : "create-todo",
+    "proxy" : {
+        "listen_path" : "/todos",
+        "upstreams" : {
+            "balancing": "roundrobin",
+            "targets": [
+                {"target": "http://todo-service:8080/todos"}
+            ]
+        },
+        "methods" : ["POST", "OPTIONS"]
+    },
+    "health_check": {
+        "url": "http://todo-service:8080/status",
+        "timeout": 3
+    },
+    "plugins": [
+        {
+            "name": "oauth2",
+            "enabled" : true,
+            "config": {
+                "server_name": "idp"
+            }
+        }
+    ]
+}
